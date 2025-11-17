@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collect the Fees - A knit Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <h1>🎓 Collect the Fees</h1>
+            <p class="subtitle">Experience how knit transforms school fee collection</p>
+            <button id="start-btn" class="btn-primary">Start Game</button>
+            <p class="hint">Takes only 30 seconds!</p>
+        </div>
+
+        <!-- Round 1: Without knit -->
+        <div id="round1-screen" class="screen">
+            <div class="round-header">
+                <h2>Round 1: Without knit</h2>
+                <div class="stats">
+                    <span class="score">Collected: <strong id="round1-score">0</strong> / 15</span>
+                    <span class="timer">Time: <strong id="round1-timer">12</strong>s</span>
+                </div>
+            </div>
+            <p class="instruction">Click on parents to collect fees before they escape!</p>
+            <div id="game-area-1" class="game-area"></div>
+        </div>
+
+        <!-- Round 1 Result -->
+        <div id="result1-screen" class="screen">
+            <h2>Round 1 Complete</h2>
+            <div class="result-box">
+                <p class="result-score">You collected <strong id="result1-score">0</strong> of 15 fees</p>
+                <p class="result-message">😓 Managing payments manually is tough!</p>
+                <p class="hint-text">Some parents always slip through...</p>
+            </div>
+            <button id="continue-btn" class="btn-primary">Continue to Round 2</button>
+        </div>
+
+        <!-- Round 2: With knit -->
+        <div id="round2-screen" class="screen">
+            <div class="round-header">
+                <h2>Round 2: With knit</h2>
+            </div>
+            <div class="knit-logo-intro">
+                <div class="knit-logo">knit</div>
+                <p class="tagline">Automated fee collection</p>
+            </div>
+            <div id="dashboard" class="dashboard">
+                <div class="dashboard-header">
+                    <h3>📊 Fee Collection Dashboard</h3>
+                    <span class="collected-count"><span id="round2-score">0</span>/15 Collected</span>
+                </div>
+                <div id="payment-list" class="payment-list"></div>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="screen">
+            <h1>🎉 All Done!</h1>
+            <div class="comparison">
+                <div class="comparison-card manual">
+                    <h3>Without knit</h3>
+                    <p class="big-number" id="final-manual">0</p>
+                    <p>fees collected</p>
+                    <p class="emoji">😰</p>
+                </div>
+                <div class="vs">VS</div>
+                <div class="comparison-card automated">
+                    <h3>With knit</h3>
+                    <p class="big-number">15</p>
+                    <p>fees collected</p>
+                    <p class="emoji">✨</p>
+                </div>
+            </div>
+            <p class="final-message">With knit, school fee collection is this easy.</p>
+            <a href="https://www.knit.cash/" class="btn-cta" target="_blank" rel="noopener noreferrer">See How knit Works</a>
+            <button id="replay-btn" class="btn-secondary">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
