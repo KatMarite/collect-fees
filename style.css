@@ -222,6 +222,7 @@ body::after {
 /* Enhanced Parent Avatars with Professional Character Design */
 .parent-avatar {
     position: absolute;
+    left: 0;
     width: 70px;
     height: 80px;
     cursor: pointer;
@@ -231,6 +232,8 @@ body::after {
     justify-content: flex-start;
     transition: transform 0.1s;
     filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+    /* Ensure smooth animations */
+    transform: translateZ(0);
 }
 
 .parent-avatar::before {
@@ -263,10 +266,10 @@ body::after {
 
 @keyframes moveAcross {
     from {
-        left: -80px;
+        transform: translateX(-80px);
     }
     to {
-        left: 110%;
+        transform: translateX(calc(100vw + 80px));
     }
 }
 
@@ -277,10 +280,10 @@ body::after {
 
 @keyframes walk {
     0%, 100% { 
-        transform: translateY(0px) rotate(-2deg); 
+        transform: rotate(-2deg) translateZ(0); 
     }
     50% { 
-        transform: translateY(-5px) rotate(2deg); 
+        transform: rotate(2deg) translateZ(0); 
     }
 }
 
@@ -338,61 +341,50 @@ body::after {
 /* Additional Movement Patterns for Increased Difficulty */
 @keyframes zigzag {
     0% { 
-        left: -80px; 
-        transform: translateY(0px);
+        transform: translateX(-80px) translateY(0px);
     }
     25% { 
-        left: 25%; 
-        transform: translateY(-30px);
+        transform: translateX(25vw) translateY(-30px);
     }
     50% { 
-        left: 50%; 
-        transform: translateY(30px);
+        transform: translateX(50vw) translateY(30px);
     }
     75% { 
-        left: 75%; 
-        transform: translateY(-20px);
+        transform: translateX(75vw) translateY(-20px);
     }
     100% { 
-        left: 110%; 
-        transform: translateY(0px);
+        transform: translateX(calc(100vw + 80px)) translateY(0px);
     }
 }
 
 @keyframes parentBounce {
     0% { 
-        left: -80px; 
-        transform: translateY(0px) scaleY(1);
+        transform: translateX(-80px) translateY(0px) scaleY(1);
     }
     20% { 
-        left: 20%; 
-        transform: translateY(-50px) scaleY(1.1);
+        transform: translateX(20vw) translateY(-50px) scaleY(1.1);
     }
     40% { 
-        left: 40%; 
-        transform: translateY(0px) scaleY(0.9);
+        transform: translateX(40vw) translateY(0px) scaleY(0.9);
     }
     60% { 
-        left: 60%; 
-        transform: translateY(-40px) scaleY(1.05);
+        transform: translateX(60vw) translateY(-40px) scaleY(1.05);
     }
     80% { 
-        left: 80%; 
-        transform: translateY(0px) scaleY(0.95);
+        transform: translateX(80vw) translateY(0px) scaleY(0.95);
     }
     100% { 
-        left: 110%; 
-        transform: translateY(0px) scaleY(1);
+        transform: translateX(calc(100vw + 80px)) translateY(0px) scaleY(1);
     }
 }
 
 /* Ensure slide-across is available as an animation name */
 @keyframes slide-across {
     from {
-        left: -80px;
+        transform: translateX(-80px);
     }
     to {
-        left: 110%;
+        transform: translateX(calc(100vw + 80px));
     }
 }
 
@@ -878,9 +870,12 @@ body::after {
 /* Optimize animations for mobile performance */
 .mobile-optimized .parent-avatar {
     /* Optimize for animation performance */
-    will-change: left, transform;
+    will-change: transform;
     backface-visibility: hidden;
     perspective: 1000px;
+    /* Force hardware acceleration */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 /* Disable hover effects on touch devices */
@@ -895,6 +890,30 @@ body::after {
     
     .parent-avatar:hover {
         transform: none;
+    }
+}
+
+/* Performance optimization for lower-end devices */
+@media (max-width: 480px) {
+    .parent-avatar {
+        /* Simplify animations on very small screens */
+        filter: none;
+    }
+    
+    .parent-avatar::after {
+        /* Reduce coin bounce frequency */
+        animation: coinBounce 1.2s ease-in-out infinite;
+    }
+    
+    /* Reduce motion for users who prefer it */
+    @media (prefers-reduced-motion: reduce) {
+        .parent-avatar::after {
+            animation: none;
+        }
+        
+        .parent-avatar {
+            animation: slide-across linear !important;
+        }
     }
 }
 
@@ -1030,6 +1049,11 @@ body::after {
         height: 75px;
         /* Larger touch target */
         padding: 5px;
+        /* Optimize for mobile performance */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        /* Reduce shadow complexity on mobile */
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
     }
 
     .parent-avatar::before {
@@ -1040,6 +1064,8 @@ body::after {
         font-size: 22px;
         top: -2px;
         right: -2px;
+        /* Simplify coin animation on mobile */
+        animation: coinBounce 0.8s ease-in-out infinite;
     }
     
     /* Small parents should still be clickable on mobile */
