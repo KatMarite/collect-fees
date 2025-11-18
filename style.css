@@ -335,54 +335,100 @@ body::after {
     right: -3px;
 }
 
+/* Tiny Parent Variation - Extremely Hard to Click */
+.parent-avatar.tiny-parent {
+    width: 35px;
+    height: 45px;
+}
+
+.parent-avatar.tiny-parent::before {
+    font-size: 24px;
+}
+
+.parent-avatar.tiny-parent::after {
+    font-size: 14px;
+    top: -2px;
+    right: -2px;
+}
+
+/* Speed Demon Variation - Extra Fast */
+.parent-avatar.speed-demon {
+    filter: drop-shadow(0 3px 6px rgba(255, 0, 0, 0.3)) hue-rotate(45deg);
+}
+
+.parent-avatar.speed-demon::after {
+    animation: coinBounce 0.3s ease-in-out infinite, speedGlow 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes speedGlow {
+    0% {
+        filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.5));
+    }
+    100% {
+        filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.8));
+    }
+}
+
 /* Additional Movement Patterns for Increased Difficulty */
 @keyframes zigzag {
     0% { 
         left: -80px; 
-        transform: translateY(0px);
+        transform: translateY(0px) rotate(0deg);
     }
-    25% { 
-        left: 25%; 
-        transform: translateY(-30px);
+    20% { 
+        left: 20%; 
+        transform: translateY(-40px) rotate(-10deg);
     }
-    50% { 
-        left: 50%; 
-        transform: translateY(30px);
+    40% { 
+        left: 40%; 
+        transform: translateY(35px) rotate(8deg);
     }
-    75% { 
-        left: 75%; 
-        transform: translateY(-20px);
+    60% { 
+        left: 60%; 
+        transform: translateY(-30px) rotate(-6deg);
+    }
+    80% { 
+        left: 80%; 
+        transform: translateY(25px) rotate(5deg);
     }
     100% { 
         left: calc(100% + 80px); 
-        transform: translateY(0px);
+        transform: translateY(0px) rotate(0deg);
     }
 }
 
 @keyframes parentBounce {
     0% { 
         left: -80px; 
-        transform: translateY(0px) scaleY(1);
+        transform: translateY(0px) scaleY(1) rotate(0deg);
     }
-    20% { 
-        left: 20%; 
-        transform: translateY(-50px) scaleY(1.1);
+    15% { 
+        left: 15%; 
+        transform: translateY(-65px) scaleY(1.2) rotate(-12deg);
     }
-    40% { 
-        left: 40%; 
-        transform: translateY(0px) scaleY(0.9);
+    30% { 
+        left: 30%; 
+        transform: translateY(15px) scaleY(0.8) rotate(8deg);
+    }
+    45% { 
+        left: 45%; 
+        transform: translateY(-55px) scaleY(1.15) rotate(-10deg);
     }
     60% { 
         left: 60%; 
-        transform: translateY(-40px) scaleY(1.05);
+        transform: translateY(20px) scaleY(0.85) rotate(6deg);
     }
-    80% { 
-        left: 80%; 
-        transform: translateY(0px) scaleY(0.95);
+    75% { 
+        left: 75%; 
+        transform: translateY(-45px) scaleY(1.1) rotate(-8deg);
+    }
+    90% { 
+        left: 90%; 
+        transform: translateY(10px) scaleY(0.9) rotate(4deg);
     }
     100% { 
         left: calc(100% + 80px); 
-        transform: translateY(0px) scaleY(1);
+        transform: translateY(0px) scaleY(1) rotate(0deg);
     }
 }
 
@@ -393,6 +439,82 @@ body::after {
     }
     to {
         left: calc(100% + 80px);
+    }
+}
+
+/* Fast Zigzag - More Erratic Movement */
+@keyframes fastZigzag {
+    0% { 
+        left: -80px; 
+        transform: translateY(0px) rotate(0deg);
+    }
+    15% { 
+        left: 15%; 
+        transform: translateY(-45px) rotate(-15deg);
+    }
+    30% { 
+        left: 30%; 
+        transform: translateY(25px) rotate(10deg);
+    }
+    45% { 
+        left: 45%; 
+        transform: translateY(-35px) rotate(-8deg);
+    }
+    60% { 
+        left: 60%; 
+        transform: translateY(40px) rotate(12deg);
+    }
+    75% { 
+        left: 75%; 
+        transform: translateY(-25px) rotate(-5deg);
+    }
+    90% { 
+        left: 90%; 
+        transform: translateY(15px) rotate(8deg);
+    }
+    100% { 
+        left: calc(100% + 80px); 
+        transform: translateY(0px) rotate(0deg);
+    }
+}
+
+/* Erratic Bounce - Unpredictable Movement */
+@keyframes erraticBounce {
+    0% { 
+        left: -80px; 
+        transform: translateY(0px) scaleY(1) rotate(0deg);
+    }
+    12% { 
+        left: 12%; 
+        transform: translateY(-60px) scaleY(1.2) rotate(-20deg);
+    }
+    25% { 
+        left: 25%; 
+        transform: translateY(20px) scaleY(0.8) rotate(15deg);
+    }
+    38% { 
+        left: 38%; 
+        transform: translateY(-80px) scaleY(1.3) rotate(-10deg);
+    }
+    50% { 
+        left: 50%; 
+        transform: translateY(10px) scaleY(0.9) rotate(25deg);
+    }
+    63% { 
+        left: 63%; 
+        transform: translateY(-50px) scaleY(1.1) rotate(-15deg);
+    }
+    75% { 
+        left: 75%; 
+        transform: translateY(30px) scaleY(0.85) rotate(10deg);
+    }
+    88% { 
+        left: 88%; 
+        transform: translateY(-40px) scaleY(1.05) rotate(-5deg);
+    }
+    100% { 
+        left: calc(100% + 80px); 
+        transform: translateY(0px) scaleY(1) rotate(0deg);
     }
 }
 
@@ -1089,6 +1211,21 @@ body::after {
 
     .parent-avatar.small-parent::after {
         font-size: 20px;
+    }
+    
+    /* Tiny parents are still challenging but not impossible on mobile */
+    .parent-avatar.tiny-parent {
+        width: 45px;
+        height: 55px;
+        padding: 8px; /* More padding for easier touch */
+    }
+
+    .parent-avatar.tiny-parent::before {
+        font-size: 28px;
+    }
+
+    .parent-avatar.tiny-parent::after {
+        font-size: 16px;
     }
     
     /* Result Screen Mobile */
