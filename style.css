@@ -60,6 +60,7 @@ body::after {
     max-width: 900px;
     width: 100%;
     min-height: 600px;
+    max-height: 90vh;
     overflow: hidden;
     position: relative;
     z-index: 1;
@@ -70,8 +71,10 @@ body::after {
     display: none;
     padding: 40px;
     min-height: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     text-align: center;
 }
@@ -786,7 +789,12 @@ body::after {
     
     .screen {
         padding: 20px;
-        min-height: 500px;
+        min-height: auto;
+        max-height: 85vh;
+        overflow-y: auto;
+        justify-content: flex-start;
+        padding-top: 30px;
+        padding-bottom: 30px;
     }
     
     #start-screen h1 {
