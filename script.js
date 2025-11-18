@@ -78,21 +78,29 @@ function spawnParent() {
     // Random vertical position
     const topPosition = Math.random() * (gameArea.clientHeight - 60);
     parent.style.top = topPosition + 'px';
+    parent.style.left = '0px'; // Ensure starting position is set
     
-    // Much faster speed (1.5-3 seconds to cross)
-    const duration = 1.5 + Math.random() * 1.5;
+    // Much faster speed (1.5-3 seconds to cross) - slightly slower on mobile for smoother animation
+    const isMobile = window.innerWidth <= 768;
+    const baseDuration = isMobile ? 2 : 1.5;
+    const duration = baseDuration + Math.random() * 1.5;
     
     // Random movement pattern
     const patterns = ['slide-across', 'zigzag', 'parentBounce'];
     const pattern = patterns[Math.floor(Math.random() * patterns.length)];
     
-    // Set complete animation property with both movement and walk animations
-    parent.style.animation = `${pattern} ${duration}s linear, walk 1s ease-in-out infinite`;
-    
     gameArea.appendChild(parent);
     
-    // Force animation to start immediately and debug
-    parent.offsetHeight; // Trigger reflow to ensure animation starts
+    // Set animation after adding to DOM for better performance
+    requestAnimationFrame(() => {
+        parent.style.animation = `${pattern} ${duration}s linear, walk 1s ease-in-out infinite`;
+        
+        // Force hardware acceleration on mobile
+        if (isMobile) {
+            parent.style.transform = 'translateZ(0)';
+            parent.style.webkitTransform = 'translateZ(0)';
+        }
+    });
     
     // Debug: Log animation info
     console.log(`Parent spawned with pattern: ${pattern}, duration: ${duration}s, animation: ${parent.style.animation}`);
