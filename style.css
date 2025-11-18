@@ -60,7 +60,6 @@ body::after {
     max-width: 900px;
     width: 100%;
     min-height: 600px;
-    max-height: 90vh;
     overflow: hidden;
     position: relative;
     z-index: 1;
@@ -71,10 +70,8 @@ body::after {
     display: none;
     padding: 40px;
     min-height: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     text-align: center;
 }
@@ -88,7 +85,7 @@ body::after {
     font-size: 3.5em;
     color: var(--primary-color);
     margin-bottom: 10px;
-    animation: bounce 1s ease-in-out infinite alternate;
+    animation: headerBounce 1s ease-in-out infinite alternate;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -233,7 +230,6 @@ body::after {
     align-items: center;
     justify-content: flex-start;
     transition: transform 0.1s;
-    animation: moveAcross linear, walk 1s ease-in-out infinite;
     filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
 }
 
@@ -272,6 +268,11 @@ body::after {
     to {
         left: 110%;
     }
+}
+
+/* Backup animation in case JavaScript doesn't load */
+.parent-avatar.fallback {
+    animation: moveAcross 3s linear, walk 1s ease-in-out infinite;
 }
 
 @keyframes walk {
@@ -315,6 +316,83 @@ body::after {
     100% {
         transform: scale(2.5) rotate(180deg);
         opacity: 0;
+    }
+}
+
+/* Small Parent Variation - Harder to Click */
+.parent-avatar.small-parent {
+    width: 50px;
+    height: 60px;
+}
+
+.parent-avatar.small-parent::before {
+    font-size: 32px;
+}
+
+.parent-avatar.small-parent::after {
+    font-size: 18px;
+    top: -3px;
+    right: -3px;
+}
+
+/* Additional Movement Patterns for Increased Difficulty */
+@keyframes zigzag {
+    0% { 
+        left: -80px; 
+        transform: translateY(0px);
+    }
+    25% { 
+        left: 25%; 
+        transform: translateY(-30px);
+    }
+    50% { 
+        left: 50%; 
+        transform: translateY(30px);
+    }
+    75% { 
+        left: 75%; 
+        transform: translateY(-20px);
+    }
+    100% { 
+        left: 110%; 
+        transform: translateY(0px);
+    }
+}
+
+@keyframes parentBounce {
+    0% { 
+        left: -80px; 
+        transform: translateY(0px) scaleY(1);
+    }
+    20% { 
+        left: 20%; 
+        transform: translateY(-50px) scaleY(1.1);
+    }
+    40% { 
+        left: 40%; 
+        transform: translateY(0px) scaleY(0.9);
+    }
+    60% { 
+        left: 60%; 
+        transform: translateY(-40px) scaleY(1.05);
+    }
+    80% { 
+        left: 80%; 
+        transform: translateY(0px) scaleY(0.95);
+    }
+    100% { 
+        left: 110%; 
+        transform: translateY(0px) scaleY(1);
+    }
+}
+
+/* Ensure slide-across is available as an animation name */
+@keyframes slide-across {
+    from {
+        left: -80px;
+    }
+    to {
+        left: 110%;
     }
 }
 
@@ -755,7 +833,7 @@ body::after {
 }
 
 /* General Animations */
-@keyframes bounce {
+@keyframes headerBounce {
     from {
         transform: translateY(0);
     }
@@ -775,54 +853,293 @@ body::after {
     }
 }
 
-/* Responsive */
+/* Mobile Optimizations */
+
+/* Add touch-friendly interactions */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Mobile-specific optimizations */
+.is-mobile .parent-avatar {
+    /* Increase touch target area without changing visual size */
+    position: relative;
+}
+
+.is-mobile .parent-avatar::before {
+    /* Ensure emoji stays crisp on mobile */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optimize animations for mobile performance */
+.mobile-optimized .parent-avatar {
+    /* Optimize for animation performance */
+    will-change: left, transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Disable hover effects on touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .btn-primary:hover, 
+    .btn-secondary:hover, 
+    .btn-cta:hover {
+        transform: none;
+        background: inherit;
+        box-shadow: inherit;
+    }
+    
+    .parent-avatar:hover {
+        transform: none;
+    }
+}
+
+/* Safe area handling for devices with notches */
+@supports (padding: max(0px)) {
+    .game-container {
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+}
+
+/* Ensure proper viewport handling */
+@viewport {
+    width: device-width;
+    zoom: 1.0;
+}
+
+/* Mobile-first responsive design */
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+        overflow-x: hidden;
+        /* Prevent zoom on input focus in iOS Safari */
+        -webkit-text-size-adjust: 100%;
+    }
+
     body::after {
-        font-size: 80px;
-        right: 20px;
-        bottom: 20px;
+        font-size: 60px;
+        right: 15px;
+        bottom: 15px;
+        opacity: 0.1;
+    }
+
+    body::before {
+        height: 120px;
     }
 
     .game-container {
-        border-radius: 16px;
+        border-radius: 12px;
+        min-height: calc(100vh - 20px);
+        max-height: calc(100vh - 20px);
+        overflow-y: auto;
+        /* Add momentum scrolling for iOS */
+        -webkit-overflow-scrolling: touch;
     }
     
     .screen {
-        padding: 20px;
-        min-height: auto;
-        max-height: 85vh;
-        overflow-y: auto;
+        padding: 15px;
+        min-height: calc(100vh - 50px);
         justify-content: flex-start;
         padding-top: 30px;
-        padding-bottom: 30px;
+    }
+    
+    /* Start Screen Mobile */
+    #start-screen {
+        justify-content: center;
+        gap: 20px;
     }
     
     #start-screen h1 {
-        font-size: 2.5em;
+        font-size: 2.8em;
+        line-height: 1.1;
+        margin-bottom: 15px;
     }
     
-    #end-screen h1 {
-        font-size: 2em;
-        margin-bottom: 20px;
+    .subtitle {
+        font-size: 1.1em;
+        margin-bottom: 25px;
+        padding: 0 20px;
+        line-height: 1.4;
     }
     
+    .hint {
+        font-size: 0.95em;
+        margin-top: 20px;
+    }
+    
+    /* Mobile-optimized buttons */
+    .btn-primary, .btn-secondary, .btn-cta {
+        padding: 18px 35px;
+        font-size: 1.15em;
+        min-height: 56px; /* iOS recommended touch target */
+        min-width: 120px;
+        margin: 8px;
+        border-radius: 28px;
+        /* Add touch feedback */
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        transition: all 0.2s ease;
+    }
+    
+    .btn-primary:active, .btn-secondary:active, .btn-cta:active {
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+    }
+    
+    /* Game Area Mobile */
     .game-area {
-        height: 300px;
+        height: 280px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        border-width: 2px;
     }
     
+    /* Round Headers Mobile */
+    .round-header {
+        margin-bottom: 15px;
+    }
+    
+    .round-header h2 {
+        font-size: 1.8em;
+        margin-bottom: 12px;
+    }
+    
+    .stats {
+        flex-direction: column;
+        gap: 8px;
+        font-size: 1.05em;
+        align-items: center;
+    }
+    
+    .instruction {
+        font-size: 1em;
+        margin-bottom: 15px;
+        padding: 0 10px;
+        line-height: 1.4;
+    }
+    
+    /* Parent Avatars Mobile - Larger for easier touching */
     .parent-avatar {
-        width: 60px;
-        height: 70px;
+        width: 65px;
+        height: 75px;
+        /* Larger touch target */
+        padding: 5px;
     }
 
     .parent-avatar::before {
-        font-size: 38px;
+        font-size: 42px;
     }
 
     .parent-avatar::after {
+        font-size: 22px;
+        top: -2px;
+        right: -2px;
+    }
+    
+    /* Small parents should still be clickable on mobile */
+    .parent-avatar.small-parent {
+        width: 58px;
+        height: 68px;
+        padding: 5px;
+    }
+
+    .parent-avatar.small-parent::before {
+        font-size: 36px;
+    }
+
+    .parent-avatar.small-parent::after {
         font-size: 20px;
     }
     
+    /* Result Screen Mobile */
+    .result-box {
+        padding: 25px 20px;
+        margin: 15px 0;
+        border-radius: 12px;
+    }
+    
+    .result-score {
+        font-size: 1.3em;
+        margin-bottom: 15px;
+    }
+    
+    .result-message {
+        font-size: 1.2em;
+        margin-bottom: 12px;
+    }
+    
+    /* Round 2 Mobile */
+    .knit-logo-intro {
+        padding: 25px 15px;
+        margin-bottom: 20px;
+    }
+    
+    .knit-logo {
+        font-size: 3.2em;
+        margin-bottom: 8px;
+    }
+
+    .knit-logo-intro::before,
+    .knit-logo-intro::after {
+        font-size: 22px;
+    }
+    
+    .tagline {
+        font-size: 1.1em;
+    }
+    
+    /* Dashboard Mobile */
+    .dashboard {
+        padding: 15px;
+        margin: 0 -5px;
+        border-radius: 12px;
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .dashboard-header h3 {
+        font-size: 1.4em;
+    }
+    
+    .collected-count {
+        font-size: 1.1em;
+    }
+    
+    .payment-list {
+        max-height: 300px;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .payment-item {
+        padding: 12px 15px;
+        margin-bottom: 8px;
+    }
+    
+    .parent-icon {
+        font-size: 32px;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .parent-name {
+        font-size: 1em;
+    }
+    
+    .fee-amount {
+        font-size: 1.1em;
+    }
+    
+    /* End Screen Mobile */
     .comparison {
         flex-direction: column;
         gap: 20px;
@@ -830,56 +1147,130 @@ body::after {
     }
     
     .comparison-card {
-        width: 100%;
-        max-width: 280px;
-        padding: 25px;
-        margin: 0 auto;
+        padding: 25px 20px;
+        min-width: auto;
+        border-radius: 12px;
     }
     
     .vs {
         transform: none;
+        font-size: 1.8em;
+        margin: 10px 0;
+    }
+    
+    .big-number {
+        font-size: 3.5em;
+        margin-bottom: 8px;
+    }
+    
+    .comparison-card h3 {
+        font-size: 1.3em;
+        margin-bottom: 15px;
+    }
+    
+    .comparison-card p {
+        font-size: 1.1em;
+        margin-bottom: 5px;
+    }
+    
+    .emoji {
+        font-size: 2.5em;
+        margin-top: 15px;
+    }
+
+    .final-message {
+        font-size: 1.25em;
+        margin: 25px 0;
+        padding: 0 20px;
+        line-height: 1.4;
+    }
+}
+
+/* Extra small devices (phones in portrait) */
+@media (max-width: 480px) {
+    .screen {
+        padding: 12px;
+        padding-top: 25px;
+    }
+    
+    #start-screen h1 {
+        font-size: 2.4em;
+    }
+    
+    .subtitle {
+        font-size: 1em;
+        padding: 0 15px;
+    }
+    
+    .btn-primary, .btn-secondary, .btn-cta {
+        padding: 16px 30px;
+        font-size: 1.1em;
+        margin: 6px;
+    }
+    
+    .game-area {
+        height: 250px;
+    }
+    
+    .stats {
+        font-size: 1em;
+    }
+    
+    .round-header h2 {
+        font-size: 1.6em;
+    }
+    
+    .knit-logo {
+        font-size: 2.8em;
+    }
+    
+    .result-box {
+        padding: 20px 15px;
         margin: 10px 0;
     }
     
     .dashboard {
-        padding: 20px;
+        padding: 12px;
     }
-
-    .knit-logo {
+    
+    .big-number {
         font-size: 3em;
     }
-
-    .knit-logo-intro::before,
-    .knit-logo-intro::after {
-        font-size: 24px;
-    }
-
-    .big-number {
-        font-size: 2.5em;
-    }
-
+    
     .final-message {
-        font-size: 1.1em;
+        font-size: 1.15em;
+    }
+}
+
+/* Landscape mobile optimization */
+@media (max-height: 600px) and (orientation: landscape) {
+    .screen {
+        min-height: auto;
         padding: 15px;
-        margin: 20px 0;
+        justify-content: flex-start;
     }
     
-    .btn-cta, .btn-secondary {
-        padding: 12px 30px;
-        font-size: 1em;
-        width: 100%;
-        max-width: 280px;
+    .game-area {
+        height: 200px;
+        margin-bottom: 15px;
     }
     
-    .comparison-card h3 {
-        font-size: 1.1em;
+    #start-screen {
+        gap: 15px;
     }
     
-    .comparison-card p {
-        font-size: 0.9em;
+    #start-screen h1 {
+        font-size: 2.2em;
+        margin-bottom: 10px;
     }
     
-    .emoji {
-        font-size: 2em;
+    .knit-logo-intro {
+        padding: 20px 15px;
+        margin-bottom: 15px;
+    }
+    
+    .result-box {
+        padding: 20px;
+        margin: 10px 0;
     }
 }
