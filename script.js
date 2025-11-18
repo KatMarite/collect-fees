@@ -60,7 +60,7 @@ function startRound1() {
         if (spawnCount >= maxParents) {
             clearInterval(spawnInterval);
         }
-    }, 400); // Spawn every 0.4 seconds (much faster!)
+    }, 300); // Spawn every 0.3 seconds (even faster!)
 }
 
 function spawnParent() {
@@ -69,9 +69,12 @@ function spawnParent() {
     parent.className = 'parent-avatar';
     parent.textContent = parentEmojis[Math.floor(Math.random() * parentEmojis.length)];
     
-    // Random size - some parents are smaller and harder to click
-    const isSmall = Math.random() < 0.4; // 40% chance of small parent
-    if (isSmall) {
+    // Random size - more parents are smaller and harder to click
+    const isSmall = Math.random() < 0.6; // 60% chance of small parent
+    const isTiny = Math.random() < 0.2; // 20% chance of tiny parent
+    if (isTiny) {
+        parent.classList.add('tiny-parent');
+    } else if (isSmall) {
         parent.classList.add('small-parent');
     }
     
@@ -80,14 +83,20 @@ function spawnParent() {
     parent.style.top = topPosition + 'px';
     parent.style.left = '-80px'; // Start off-screen
     
-    // Much faster speed (1.5-3 seconds to cross) - slightly slower on mobile for smoother animation
+    // Super fast speed (0.8-2 seconds to cross) - much more challenging
     const isMobile = window.innerWidth <= 768;
-    const baseDuration = isMobile ? 2 : 1.5;
-    const duration = baseDuration + Math.random() * 1.5;
+    const baseDuration = isMobile ? 1.2 : 0.8;
+    const duration = baseDuration + Math.random() * 1.2;
     
-    // Random movement pattern
-    const patterns = ['slide-across', 'zigzag', 'parentBounce'];
+    // Random movement pattern - more erratic options
+    const patterns = ['slide-across', 'zigzag', 'parentBounce', 'fastZigzag', 'erraticBounce'];
     const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+    
+    // Some parents are extra speedy
+    const isSpeedDemon = Math.random() < 0.3; // 30% chance
+    if (isSpeedDemon) {
+        parent.classList.add('speed-demon');
+    }
     
     gameArea.appendChild(parent);
     
