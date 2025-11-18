@@ -230,10 +230,7 @@ body::after {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    transition: transform 0.1s;
     filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
-    /* Ensure smooth animations */
-    transform: translateZ(0);
 }
 
 .parent-avatar::before {
@@ -266,10 +263,10 @@ body::after {
 
 @keyframes moveAcross {
     from {
-        transform: translateX(-80px);
+        left: -80px;
     }
     to {
-        transform: translateX(calc(100vw + 80px));
+        left: calc(100% + 80px);
     }
 }
 
@@ -280,10 +277,10 @@ body::after {
 
 @keyframes walk {
     0%, 100% { 
-        transform: rotate(-2deg) translateZ(0); 
+        transform: translateY(0px) rotate(-1deg); 
     }
     50% { 
-        transform: rotate(2deg) translateZ(0); 
+        transform: translateY(-3px) rotate(1deg); 
     }
 }
 
@@ -341,50 +338,61 @@ body::after {
 /* Additional Movement Patterns for Increased Difficulty */
 @keyframes zigzag {
     0% { 
-        transform: translateX(-80px) translateY(0px);
+        left: -80px; 
+        transform: translateY(0px);
     }
     25% { 
-        transform: translateX(25vw) translateY(-30px);
+        left: 25%; 
+        transform: translateY(-30px);
     }
     50% { 
-        transform: translateX(50vw) translateY(30px);
+        left: 50%; 
+        transform: translateY(30px);
     }
     75% { 
-        transform: translateX(75vw) translateY(-20px);
+        left: 75%; 
+        transform: translateY(-20px);
     }
     100% { 
-        transform: translateX(calc(100vw + 80px)) translateY(0px);
+        left: calc(100% + 80px); 
+        transform: translateY(0px);
     }
 }
 
 @keyframes parentBounce {
     0% { 
-        transform: translateX(-80px) translateY(0px) scaleY(1);
+        left: -80px; 
+        transform: translateY(0px) scaleY(1);
     }
     20% { 
-        transform: translateX(20vw) translateY(-50px) scaleY(1.1);
+        left: 20%; 
+        transform: translateY(-50px) scaleY(1.1);
     }
     40% { 
-        transform: translateX(40vw) translateY(0px) scaleY(0.9);
+        left: 40%; 
+        transform: translateY(0px) scaleY(0.9);
     }
     60% { 
-        transform: translateX(60vw) translateY(-40px) scaleY(1.05);
+        left: 60%; 
+        transform: translateY(-40px) scaleY(1.05);
     }
     80% { 
-        transform: translateX(80vw) translateY(0px) scaleY(0.95);
+        left: 80%; 
+        transform: translateY(0px) scaleY(0.95);
     }
     100% { 
-        transform: translateX(calc(100vw + 80px)) translateY(0px) scaleY(1);
+        left: calc(100% + 80px); 
+        transform: translateY(0px) scaleY(1);
     }
 }
 
 /* Ensure slide-across is available as an animation name */
 @keyframes slide-across {
     from {
-        transform: translateX(-80px);
+        left: -80px;
     }
     to {
-        transform: translateX(calc(100vw + 80px));
+        left: calc(100% + 80px);
     }
 }
 
