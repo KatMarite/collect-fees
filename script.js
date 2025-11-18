@@ -78,7 +78,7 @@ function spawnParent() {
     // Random vertical position
     const topPosition = Math.random() * (gameArea.clientHeight - 60);
     parent.style.top = topPosition + 'px';
-    parent.style.left = '0px'; // Ensure starting position is set
+    parent.style.left = '-80px'; // Start off-screen
     
     // Much faster speed (1.5-3 seconds to cross) - slightly slower on mobile for smoother animation
     const isMobile = window.innerWidth <= 768;
@@ -91,29 +91,27 @@ function spawnParent() {
     
     gameArea.appendChild(parent);
     
-    // Set animation after adding to DOM for better performance
-    requestAnimationFrame(() => {
-        parent.style.animation = `${pattern} ${duration}s linear, walk 1s ease-in-out infinite`;
-        
-        // Force hardware acceleration on mobile
-        if (isMobile) {
-            parent.style.transform = 'translateZ(0)';
-            parent.style.webkitTransform = 'translateZ(0)';
-        }
-    });
+    // Force a reflow to ensure initial transform is applied
+    parent.offsetHeight;
     
-    // Debug: Log animation info
-    console.log(`Parent spawned with pattern: ${pattern}, duration: ${duration}s, animation: ${parent.style.animation}`);
+    // Set animation immediately
+    parent.style.animation = `${pattern} ${duration}s linear, walk 1s ease-in-out infinite`;
     
-    // Ensure animation is actually running after a brief delay
+    // Force hardware acceleration on mobile
+    if (isMobile) {
+        parent.style.willChange = 'transform';
+    }
+    
+    // Ensure animation starts properly
     setTimeout(() => {
-        if (parent.parentNode && window.getComputedStyle(parent).animationPlayState !== 'running') {
-            console.log('Animation not running, forcing restart:', pattern);
-            parent.style.animation = 'none';
-            parent.offsetHeight; // Force reflow
-            parent.style.animation = `${pattern} ${duration}s linear, walk 1s ease-in-out infinite`;
+        if (parent.parentNode) {
+            // Verify animation is applied
+            const computedStyle = window.getComputedStyle(parent);
+            if (computedStyle.animationName === 'none') {
+                parent.style.animation = `${pattern} ${duration}s linear, walk 1s ease-in-out infinite`;
+            }
         }
-    }, 100);
+    }, 50);
     
     // Touch and click handlers for better mobile experience
     const handleCollect = (e) => {
