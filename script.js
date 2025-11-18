@@ -1,6 +1,6 @@
 // Game State
 let round1Score = 0;
-let round1Timer = 12;
+let round1Timer = 8;
 let round2Score = 0;
 let timerInterval;
 let spawnInterval;
@@ -8,9 +8,9 @@ let spawnInterval;
 // Parent names and emojis
 const parentEmojis = ['👨', '👩', '👴', '👵', '🧑', '👨‍🦱', '👩‍🦰', '👨‍🦳', '👩‍🦳'];
 const parentNames = [
-    'Mr. Sharma', 'Ms. Patel', 'Mr. Kumar', 'Ms. Reddy', 'Mr. Singh',
-    'Ms. Gupta', 'Mr. Mehta', 'Ms. Verma', 'Mr. Joshi', 'Ms. Nair',
-    'Mr. Iyer', 'Ms. Khan', 'Mr. Das', 'Ms. Rao', 'Mr. Desai'
+    'Mr. Khumalo', 'Ms. Setalala', 'Mr. Chueu', 'Ms. Motaung', 'Mr. Kondile',
+    'Ms. Mokhomo', 'Mr. Metsing', 'Ms. Vumani', 'Mr. Jafta', 'Ms. Ngwenya',
+    'Mr. Ibu', 'Ms. Khotso', 'Mr. Disema', 'Ms. Rao', 'Mr. Desai'
 ];
 
 // Screen Navigation
@@ -30,7 +30,7 @@ document.getElementById('start-btn').addEventListener('click', () => {
 // Round 1: Manual Collection
 function startRound1() {
     round1Score = 0;
-    round1Timer = 10;
+    round1Timer = 8;
     document.getElementById('round1-score').textContent = round1Score;
     document.getElementById('round1-timer').textContent = round1Timer;
     
@@ -60,7 +60,7 @@ function startRound1() {
         if (spawnCount >= maxParents) {
             clearInterval(spawnInterval);
         }
-    }, 600); // Spawn every 0.6 seconds
+    }, 400); // Spawn every 0.4 seconds (much faster!)
 }
 
 function spawnParent() {
@@ -69,28 +69,66 @@ function spawnParent() {
     parent.className = 'parent-avatar';
     parent.textContent = parentEmojis[Math.floor(Math.random() * parentEmojis.length)];
     
+    // Random size - some parents are smaller and harder to click
+    const isSmall = Math.random() < 0.4; // 40% chance of small parent
+    if (isSmall) {
+        parent.classList.add('small-parent');
+    }
+    
     // Random vertical position
     const topPosition = Math.random() * (gameArea.clientHeight - 60);
     parent.style.top = topPosition + 'px';
     
-    // Random speed (1.5-2.5 seconds to cross) - very fast!
-    const duration = 1.5 + Math.random() * 1;
-    parent.style.animationDuration = duration + 's';
+    // Much faster speed (1.5-3 seconds to cross)
+    const duration = 1.5 + Math.random() * 1.5;
+    
+    // Random movement pattern
+    const patterns = ['slide-across', 'zigzag', 'parentBounce'];
+    const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+    
+    // Set complete animation property with both movement and walk animations
+    parent.style.animation = `${pattern} ${duration}s linear, walk 1s ease-in-out infinite`;
     
     gameArea.appendChild(parent);
     
-    // Click handler
-    parent.addEventListener('click', () => {
+    // Force animation to start immediately and debug
+    parent.offsetHeight; // Trigger reflow to ensure animation starts
+    
+    // Debug: Log animation info
+    console.log(`Parent spawned with pattern: ${pattern}, duration: ${duration}s, animation: ${parent.style.animation}`);
+    
+    // Ensure animation is actually running after a brief delay
+    setTimeout(() => {
+        if (parent.parentNode && window.getComputedStyle(parent).animationPlayState !== 'running') {
+            console.log('Animation not running, forcing restart:', pattern);
+            parent.style.animation = 'none';
+            parent.offsetHeight; // Force reflow
+            parent.style.animation = `${pattern} ${duration}s linear, walk 1s ease-in-out infinite`;
+        }
+    }, 100);
+    
+    // Touch and click handlers for better mobile experience
+    const handleCollect = (e) => {
+        e.preventDefault(); // Prevent any default behavior
         if (!parent.classList.contains('clicked')) {
             parent.classList.add('clicked');
             round1Score++;
             document.getElementById('round1-score').textContent = round1Score;
             
+            // Add haptic feedback for mobile devices
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+            
             setTimeout(() => {
                 parent.remove();
             }, 400);
         }
-    });
+    };
+    
+    // Add both touch and click events for better mobile support
+    parent.addEventListener('click', handleCollect);
+    parent.addEventListener('touchstart', handleCollect, { passive: false });
     
     // Auto remove when animation ends
     setTimeout(() => {
@@ -143,7 +181,7 @@ function startRound2() {
                     showEndScreen();
                 }, 1000);
             }
-        }, 400); // Collect every 0.4 seconds
+        }, 300); // Collect every 0.3 seconds (faster to match difficulty)
     }, 1500); // Wait for logo animation
 }
 
@@ -198,3 +236,56 @@ document.addEventListener('visibilitychange', () => {
         }
     }
 });
+
+// Mobile-specific optimizations
+document.addEventListener('DOMContentLoaded', () => {
+    // Prevent zoom on double tap for iOS
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+
+    // Optimize for mobile performance
+    if (window.innerWidth <= 768) {
+        // Reduce animation complexity on mobile
+        document.body.classList.add('mobile-optimized');
+        
+        // Adjust game difficulty slightly for mobile
+        const originalSpawnParent = window.spawnParent;
+        if (originalSpawnParent) {
+            // Slightly larger touch targets on mobile
+            const gameArea = document.getElementById('game-area-1');
+            if (gameArea) {
+                gameArea.style.padding = '10px';
+            }
+        }
+    }
+    
+    // Handle orientation changes
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            // Force a repaint to handle orientation change properly
+            const gameArea = document.getElementById('game-area-1');
+            if (gameArea && gameArea.innerHTML) {
+                // Recalculate positions if game is active
+                const parents = gameArea.querySelectorAll('.parent-avatar');
+                parents.forEach(parent => {
+                    const currentTop = parseFloat(parent.style.top);
+                    const maxTop = gameArea.clientHeight - 80;
+                    if (currentTop > maxTop) {
+                        parent.style.top = maxTop + 'px';
+                    }
+                });
+            }
+        }, 100);
+    });
+});
+
+// Add mobile-specific CSS class for conditional styling
+if (window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    document.documentElement.classList.add('is-mobile');
+}
