@@ -8,9 +8,9 @@ let spawnInterval;
 // Parent names and emojis
 const parentEmojis = ['👨', '👩', '👴', '👵', '🧑', '👨‍🦱', '👩‍🦰', '👨‍🦳', '👩‍🦳'];
 const parentNames = [
-    'Mr. Khumalo', 'Ms. Setalala', 'Mr. Chueu', 'Ms. Motaung', 'Mr. Kondile',
-    'Ms. Mokhomo', 'Mr. Metsing', 'Ms. Vumani', 'Mr. Jafta', 'Ms. Ngwenya',
-    'Mr. Ibu', 'Ms. Khotso', 'Mr. Disema', 'Ms. Rao', 'Mr. Desai'
+    'Mr. Sharma', 'Ms. Patel', 'Mr. Kumar', 'Ms. Reddy', 'Mr. Singh',
+    'Ms. Gupta', 'Mr. Mehta', 'Ms. Verma', 'Mr. Joshi', 'Ms. Nair',
+    'Mr. Iyer', 'Ms. Khan', 'Mr. Das', 'Ms. Rao', 'Mr. Desai'
 ];
 
 // Screen Navigation
@@ -30,7 +30,7 @@ document.getElementById('start-btn').addEventListener('click', () => {
 // Round 1: Manual Collection
 function startRound1() {
     round1Score = 0;
-    round1Timer = 12;
+    round1Timer = 10;
     document.getElementById('round1-score').textContent = round1Score;
     document.getElementById('round1-timer').textContent = round1Timer;
     
@@ -49,7 +49,7 @@ function startRound1() {
     
     // Spawn parents
     let spawnCount = 0;
-    const maxParents = 15;
+    const maxParents = 20;
     
     spawnInterval = setInterval(() => {
         if (spawnCount < maxParents && round1Timer > 0) {
@@ -60,7 +60,7 @@ function startRound1() {
         if (spawnCount >= maxParents) {
             clearInterval(spawnInterval);
         }
-    }, 800); // Spawn every 0.8 seconds
+    }, 600); // Spawn every 0.6 seconds
 }
 
 function spawnParent() {
@@ -73,8 +73,8 @@ function spawnParent() {
     const topPosition = Math.random() * (gameArea.clientHeight - 60);
     parent.style.top = topPosition + 'px';
     
-    // Random speed (3-5 seconds to cross)
-    const duration = 3 + Math.random() * 2;
+    // Random speed (1.5-2.5 seconds to cross) - very fast!
+    const duration = 1.5 + Math.random() * 1;
     parent.style.animationDuration = duration + 's';
     
     gameArea.appendChild(parent);
@@ -131,7 +131,7 @@ function startRound2() {
         // Start collecting fees automatically
         let collectedCount = 0;
         const collectInterval = setInterval(() => {
-            if (collectedCount < 15) {
+            if (collectedCount < 20) {
                 addPaymentItem(collectedCount);
                 collectedCount++;
                 round2Score++;
