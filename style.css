@@ -997,15 +997,12 @@ body::after {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Optimize animations for mobile performance */
+/* Optimize animations for all devices */
 .mobile-optimized .parent-avatar {
-    /* Optimize for animation performance */
+    /* Same optimization for all devices */
     will-change: transform;
     backface-visibility: hidden;
     perspective: 1000px;
-    /* Force hardware acceleration */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
 }
 
 /* Disable hover effects on touch devices */
@@ -1028,11 +1025,6 @@ body::after {
     .parent-avatar {
         /* Simplify animations on very small screens */
         filter: none;
-    }
-    
-    .parent-avatar::after {
-        /* Reduce coin bounce frequency */
-        animation: coinBounce 1.2s ease-in-out infinite;
     }
     
     /* Reduce motion for users who prefer it */
@@ -1179,11 +1171,6 @@ body::after {
         height: 75px;
         /* Larger touch target */
         padding: 5px;
-        /* Optimize for mobile performance */
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-        /* Reduce shadow complexity on mobile */
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
     }
 
     .parent-avatar::before {
@@ -1194,8 +1181,6 @@ body::after {
         font-size: 22px;
         top: -2px;
         right: -2px;
-        /* Simplify coin animation on mobile */
-        animation: coinBounce 0.8s ease-in-out infinite;
     }
     
     /* Small parents should still be clickable on mobile */
