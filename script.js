@@ -83,9 +83,8 @@ function spawnParent() {
     parent.style.top = topPosition + 'px';
     parent.style.left = '-80px'; // Start off-screen
     
-    // Super fast speed (0.8-2 seconds to cross) - much more challenging
-    const isMobile = window.innerWidth <= 768;
-    const baseDuration = isMobile ? 1.2 : 0.8;
+    // Super fast speed (0.8-2 seconds to cross) - same on all devices
+    const baseDuration = 0.8;
     const duration = baseDuration + Math.random() * 1.2;
     
     // Random movement pattern - more erratic options
@@ -103,13 +102,11 @@ function spawnParent() {
     // Force a reflow to ensure initial transform is applied
     parent.offsetHeight;
     
-    // Set animation immediately
+    // Set animation immediately - same on all devices
     parent.style.animation = `${pattern} ${duration}s linear, walk 1s ease-in-out infinite`;
     
-    // Force hardware acceleration on mobile
-    if (isMobile) {
-        parent.style.willChange = 'transform';
-    }
+    // Force hardware acceleration on all devices for consistency
+    parent.style.willChange = 'transform';
     
     // Ensure animation starts properly
     setTimeout(() => {
