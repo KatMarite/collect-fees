@@ -78,8 +78,19 @@ function spawnParent() {
         parent.classList.add('small-parent');
     }
     
-    // Random vertical position
-    const topPosition = Math.random() * (gameArea.clientHeight - 60);
+    // Random vertical position - ensure parents fit in container
+    // Account for parent height based on size variant
+    let parentHeight = 80; // Default parent height
+    if (isTiny) {
+        parentHeight = window.innerWidth <= 768 ? 55 : 45; // Mobile vs desktop tiny size
+    } else if (isSmall) {
+        parentHeight = window.innerWidth <= 768 ? 68 : 60; // Mobile vs desktop small size
+    } else {
+        parentHeight = window.innerWidth <= 768 ? 75 : 80; // Mobile vs desktop normal size
+    }
+    
+    const maxTop = gameArea.clientHeight - parentHeight - 10; // 10px margin from bottom
+    const topPosition = Math.random() * Math.max(0, maxTop);
     parent.style.top = topPosition + 'px';
     parent.style.left = '-80px'; // Start off-screen
     
