@@ -1135,7 +1135,7 @@ body::after {
     
     /* Game Area Mobile */
     .game-area {
-        height: 280px;
+        height: 260px;
         margin-bottom: 20px;
         border-radius: 12px;
         border-width: 2px;
@@ -1365,7 +1365,7 @@ body::after {
     }
     
     .game-area {
-        height: 250px;
+        height: 220px;
     }
     
     .stats {
@@ -1407,7 +1407,7 @@ body::after {
     }
     
     .game-area {
-        height: 200px;
+        height: 180px;
         margin-bottom: 15px;
     }
     
